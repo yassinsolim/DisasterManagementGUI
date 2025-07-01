@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<translations>
+    <menu>
+        <title>Système de gestion des catastrophes</title>
+        <subtitle>Gérer les victimes, fournitures, enquêtes et emplacements</subtitle>
+        <victim>Gestion des victimes</victim>
+        <victims>Victimes</victims>
+        <supply>Gestion des fournitures</supply>
+        <supplies>Fournitures</supplies>
+        <inquiry>Gestion des enquêtes</inquiry>
+        <inquiries>Enquêtes</inquiries>
+        <location>Gestion des emplacements</location>
+        <locations>Emplacements</locations>
+        <add_victim>Ajouter une victime</add_victim>
+        <update_victim>Modifier une victime</update_victim>
+        <delete_victim>Supprimer une victime</delete_victim>
+        <view_victims>Voir les victimes</view_victims>
+        <add_supply>Ajouter une fourniture</add_supply>
+        <update_supply>Modifier une fourniture</update_supply>
+        <delete_supply>Supprimer une fourniture</delete_supply>
+        <view_supplies>Voir les fournitures</view_supplies>
+        <add_inquiry>Ajouter une enquête</add_inquiry>
+        <update_inquiry>Modifier une enquête</update_inquiry>
+        <delete_inquiry>Supprimer une enquête</delete_inquiry>
+        <view_inquiries>Voir les enquêtes</view_inquiries>
+        <add_location>Ajouter un emplacement</add_location>
+        <update_location>Modifier un emplacement</update_location>
+        <delete_location>Supprimer un emplacement</delete_location>
+        <view_locations>Voir les emplacements</view_locations>
+        <back>Retour au menu principal</back>
+        <exit>Quitter</exit>
+    </menu>
+    <actions>
+        <view_more>Voir plus</view_more>
+        <save>Enregistrer</save>
+        <cancel>Annuler</cancel>
+        <close>Fermer</close>
+        <edit>Modifier</edit>
+        <delete>Supprimer</delete>
+        <update>Mettre à jour la sélection</update>
+        <add_medical>Ajouter un dossier médical</add_medical>
+        <edit_medical>Modifier le dossier médical</edit_medical>
+    </actions>
+    <labels>
+        <first_name>Prénom:</first_name>
+        <last_name>Nom:</last_name>
+        <date_of_birth>Date de naissance:</date_of_birth>
+        <gender>Genre:</gender>
+        <location>Emplacement:</location>
+        <select_victim>Sélectionner une victime:</select_victim>
+        <medical_records>Dossiers médicaux</medical_records>
+        <details>Détails</details>
+        <manage_victim>Gérer la victime: {0} {1}</manage_victim>
+        <supply_type>Type de fourniture:</supply_type>
+        <comments>Commentaires:</comments>
+        <select_supply>Sélectionner une fourniture:</select_supply>
+        <inquirer>Demandeur:</inquirer>
+        <seeking>Recherche:</seeking>
+        <select_inquiry>Sélectionner une enquête:</select_inquiry>
+        <location_name>Nom de l'emplacement:</location_name>
+        <address>Adresse:</address>
+        <select_location>Sélectionner un emplacement:</select_location>
+        <treatment_details>Détails du traitement:</treatment_details>
+        <date>Date:</date>
+        <contact>Coordonnées:</contact>
+        <inquirer_details>Détails de l'enquête:</inquirer_details>
+        <not_assigned>N/D</not_assigned>
+    </labels>
+    <confirmations>
+        <delete_supply>Supprimer la fourniture?</delete_supply>
+        <delete_inquiry>Supprimer l'enquête?</delete_inquiry>
+        <delete_location>Supprimer l'emplacement?</delete_location>
+        <delete_medical>Supprimer le dossier médical?</delete_medical>
+        <delete_message>Êtes-vous sûr de vouloir supprimer cet élément?</delete_message>
+        <select_to_edit>Veuillez sélectionner un élément à modifier</select_to_edit>
+    </confirmations>
+    <messages>
+        <error>Erreur</error>
+        <success>Succès</success>
+        <required_fields>Veuillez remplir tous les champs obligatoires.</required_fields>
+        <invalid_date>Format de date invalide. Utilisez AAAA-MM-JJ.</invalid_date>
+        <select_item>Veuillez sélectionner un élément pour continuer.</select_item>
+        <load_error>Échec du chargement des données: {0}</load_error>
+        <save_error>Échec de l'enregistrement des modifications: {0}</save_error>
+        <delete_error>Échec de la suppression de l'élément: {0}</delete_error>
+        <saved>Modifications enregistrées avec succès.</saved>
+        <deleted>Élément supprimé avec succès.</deleted>
+        <added>Élément ajouté avec succès.</added>
+        <updated>Élément mis à jour avec succès.</updated>
+        <invalid_choice>Choix invalide. Veuillez réessayer.</invalid_choice>
+        <goodbye>Merci d'avoir utilisé le Système de gestion des catastrophes. Au revoir!</goodbye>
+    </messages>
+    <table>
+        <id>ID</id>
+        <name>Nom</name>
+        <type>Type</type>
+        <date>Date</date>
+        <location>Emplacement</location>
+        <comments>Commentaires</comments>
+        <details>Détails</details>
+        <treatment>Traitement</treatment>
+        <date_of_birth>Date de naissance</date_of_birth>
+        <gender>Genre</gender>
+    </table>
+    <gui>
+        <button>
+            <view_details>Voir les détails</view_details>
+            <close>Fermer</close>
+            <save>Enregistrer</save>
+            <cancel>Annuler</cancel>
+            <delete>Supprimer</delete>
+            <edit>Modifier</edit>
+            <add_medical>Ajouter un dossier médical</add_medical>
+            <edit_medical>Modifier le dossier médical</edit_medical>
+        </button>
+        <dialog>
+            <add_victim>Ajouter une victime</add_victim>
+            <update_victim>Modifier une victime</update_victim>
+            <view_victims>Voir les victimes</view_victims>
+            <delete_victim>Supprimer une victime</delete_victim>
+            <add_supply>Ajouter une fourniture</add_supply>
+            <update_supply>Modifier une fourniture</update_supply>
+            <view_supplies>Voir les fournitures</view_supplies>
+            <delete_supply>Supprimer une fourniture</delete_supply>
+            <add_medical_record>Ajouter un dossier médical</add_medical_record>
+            <confirm>Confirmer</confirm>
+        </dialog>
+        <victim>
+            <firstname>Prénom:</firstname>
+            <lastname>Nom:</lastname>
+            <dob>Date de naissance:</dob>
+            <gender>Genre:</gender>
+            <location>Emplacement:</location>
+            <select>Sélectionner une victime:</select>
+            <manage>Gérer la victime: {0} {1}</manage>
+            <details_tab>Détails de la victime</details_tab>
+            <medical_tab>Dossiers médicaux</medical_tab>
+        </victim>
+        <supply>
+            <type>Type de fourniture:</type>
+            <comments>Commentaires:</comments>
+            <select>Sélectionner une fourniture:</select>
+        </supply>
+        <medical>
+            <treatment>Détails du traitement:</treatment>
+            <date>Date du traitement:</date>
+            <location>Lieu du traitement:</location>
+            <delete_message>Êtes-vous sûr de vouloir supprimer ce dossier médical?</delete_message>
+            <confirm_delete>Confirmer la suppression</confirm_delete>
+        </medical>
+        <table>
+            <id>ID</id>
+            <name>Nom</name>
+            <dob>Date de naissance</dob>
+            <gender>Genre</gender>
+            <location>Emplacement</location>
+        </table>
+        <error>
+            <title>Erreur</title>
+            <victims>Échec du chargement des victimes:</victims>
+            <locations>Échec du chargement des emplacements:</locations>
+            <supplies>Échec du chargement des fournitures:</supplies>
+            <add_victim>Échec de l'ajout de la victime:</add_victim>
+            <add_medical_record>Échec de l'ajout du dossier médical:</add_medical_record>
+            <load_victim>Échec du chargement de la victime:</load_victim>
+            <select_victim>Veuillez sélectionner une victime</select_victim>
+            <delete_victim>Échec de la suppression de la victime</delete_victim>
+            <load_medical_record>Échec du chargement du dossier médical:</load_medical_record>
+            <select_medical_record>Veuillez sélectionner un dossier médical</select_medical_record>
+            <delete_medical_record>Échec de la suppression du dossier médical:</delete_medical_record>
+        </error>
+        <success>
+            <title>Succès</title>
+            <victim_added>La victime a été ajoutée avec succès</victim_added>
+            <victim_deleted>La victime a été supprimée avec succès</victim_deleted>
+            <medical_record_added>Le dossier médical a été ajouté avec succès</medical_record_added>
+            <deleted>L'enregistrement a été supprimé avec succès</deleted>
+        </success>
+        <validation>
+            <required_fields>Veuillez remplir tous les champs obligatoires</required_fields>
+            <treatment_required>Les détails du traitement sont obligatoires</treatment_required>
+            <location_required>Veuillez sélectionner un emplacement</location_required>
+            <type_required>Le type de fourniture est obligatoire</type_required>
+            <select_supply>Veuillez sélectionner une fourniture à modifier</select_supply>
+        </validation>
+        <gender>
+            <man>Homme</man>
+            <woman>Femme</woman>
+            <nonbinary>Non-binaire</nonbinary>
+        </gender>
+        <location>
+            <unassigned>Non assigné</unassigned>
+        </location>
+    </gui>
+    <prompt>
+        <choice>Veuillez sélectionner une option:</choice>
+    </prompt>
+</translations>

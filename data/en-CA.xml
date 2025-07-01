@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<translations>
+    <menu>
+        <title>Disaster Management System</title>
+        <subtitle>Manage Victims, Supplies, Inquiries and Locations</subtitle>
+        <victim>Victim Management</victim>
+        <victims>Victims</victims>
+        <supply>Supply Management</supply>
+        <supplies>Supplies</supplies>
+        <inquiry>Inquiry Management</inquiry>
+        <inquiries>Inquiries</inquiries>
+        <location>Location Management</location>
+        <locations>Locations</locations>
+        <add_victim>Add Victim</add_victim>
+        <update_victim>Update Victim</update_victim>
+        <delete_victim>Delete Victim</delete_victim>
+        <view_victims>View Victims</view_victims>
+        <add_supply>Add Supply</add_supply>
+        <update_supply>Update Supply</update_supply>
+        <delete_supply>Delete Supply</delete_supply>
+        <view_supplies>View Supplies</view_supplies>
+        <add_inquiry>Add Inquiry</add_inquiry>
+        <update_inquiry>Update Inquiry</update_inquiry>
+        <delete_inquiry>Delete Inquiry</delete_inquiry>
+        <view_inquiries>View Inquiries</view_inquiries>
+        <add_location>Add Location</add_location>
+        <update_location>Update Location</update_location>
+        <delete_location>Delete Location</delete_location>
+        <view_locations>View Locations</view_locations>
+        <back>Back to Main Menu</back>
+        <exit>Exit</exit>
+    </menu>
+    <actions>
+        <view_more>View More</view_more>
+        <save>Save</save>
+        <cancel>Cancel</cancel>
+        <close>Close</close>
+        <edit>Edit</edit>
+        <delete>Delete</delete>
+        <update>Update Selected</update>
+        <add_medical>Add Medical Record</add_medical>
+        <edit_medical>Edit Medical Record</edit_medical>
+    </actions>
+    <labels>
+        <first_name>First Name:</first_name>
+        <last_name>Last Name:</last_name>
+        <date_of_birth>Date of Birth:</date_of_birth>
+        <gender>Gender:</gender>
+        <location>Location:</location>
+        <select_victim>Select a Victim:</select_victim>
+        <medical_records>Medical Records</medical_records>
+        <details>Details</details>
+        <manage_victim>Manage Victim: {0} {1}</manage_victim>
+        <supply_type>Supply Type:</supply_type>
+        <comments>Comments:</comments>
+        <select_supply>Select a Supply:</select_supply>
+        <inquirer>Inquirer:</inquirer>
+        <seeking>Seeking:</seeking>
+        <select_inquiry>Select an Inquiry:</select_inquiry>
+        <location_name>Location Name:</location_name>
+        <address>Address:</address>
+        <select_location>Select a Location:</select_location>
+        <treatment_details>Treatment Details:</treatment_details>
+        <date>Date:</date>
+        <contact>Contact Information:</contact>
+        <inquirer_details>Inquiry Details:</inquirer_details>
+        <not_assigned>N/A</not_assigned>
+    </labels>
+    <confirmations>
+        <delete_supply>Delete Supply?</delete_supply>
+        <delete_inquiry>Delete Inquiry?</delete_inquiry>
+        <delete_location>Delete Location?</delete_location>
+        <delete_medical>Delete Medical Record?</delete_medical>
+        <delete_message>Are you sure you want to delete this item?</delete_message>
+        <select_to_edit>Please select an item to edit</select_to_edit>
+    </confirmations>
+    <messages>
+        <error>Error</error>
+        <success>Success</success>
+        <required_fields>Please fill in all required fields.</required_fields>
+        <invalid_date>Invalid date format. Use YYYY-MM-DD.</invalid_date>
+        <select_item>Please select an item to continue.</select_item>
+        <load_error>Failed to load data: {0}</load_error>
+        <save_error>Failed to save changes: {0}</save_error>
+        <delete_error>Failed to delete item: {0}</delete_error>
+        <saved>Changes saved successfully.</saved>
+        <deleted>Item deleted successfully.</deleted>
+        <added>Item added successfully.</added>
+        <updated>Item updated successfully.</updated>
+        <invalid_choice>Invalid choice. Please try again.</invalid_choice>
+        <goodbye>Thank you for using the Disaster Management System. Goodbye!</goodbye>
+    </messages>
+    <table>
+        <id>ID</id>
+        <name>Name</name>
+        <type>Type</type>
+        <date>Date</date>
+        <location>Location</location>
+        <comments>Comments</comments>
+        <details>Details</details>
+        <treatment>Treatment</treatment>
+        <date_of_birth>Date of Birth</date_of_birth>
+        <gender>Gender</gender>
+    </table>
+    <gui>
+        <button>
+            <view_details>View Details</view_details>
+            <close>Close</close>
+            <save>Save</save>
+            <cancel>Cancel</cancel>
+            <delete>Delete</delete>
+            <edit>Edit</edit>
+            <add_medical>Add Medical Record</add_medical>
+            <edit_medical>Edit Medical Record</edit_medical>
+        </button>
+        <dialog>
+            <add_victim>Add Victim</add_victim>
+            <update_victim>Update Victim</update_victim>
+            <view_victims>View Victims</view_victims>
+            <delete_victim>Delete Victim</delete_victim>
+            <add_supply>Add Supply</add_supply>
+            <update_supply>Update Supply</update_supply>
+            <view_supplies>View Supplies</view_supplies>
+            <delete_supply>Delete Supply</delete_supply>
+            <add_medical_record>Add Medical Record</add_medical_record>
+            <confirm>Confirm</confirm>
+        </dialog>
+        <victim>
+            <firstname>First Name:</firstname>
+            <lastname>Last Name:</lastname>
+            <dob>Date of Birth:</dob>
+            <gender>Gender:</gender>
+            <location>Location:</location>
+            <select>Select Victim:</select>
+            <manage>Manage Victim: {0} {1}</manage>
+            <details_tab>Victim Details</details_tab>
+            <medical_tab>Medical Records</medical_tab>
+        </victim>
+        <supply>
+            <type>Supply Type:</type>
+            <comments>Comments:</comments>
+            <select>Select Supply:</select>
+        </supply>
+        <medical>
+            <treatment>Treatment Details:</treatment>
+            <date>Treatment Date:</date>
+            <location>Treatment Location:</location>
+            <delete_message>Are you sure you want to delete this medical record?</delete_message>
+            <confirm_delete>Confirm Delete</confirm_delete>
+        </medical>
+        <table>
+            <id>ID</id>
+            <name>Name</name>
+            <dob>Date of Birth</dob>
+            <gender>Gender</gender>
+            <location>Location</location>
+        </table>
+        <error>
+            <title>Error</title>
+            <victims>Failed to load victims:</victims>
+            <locations>Failed to load locations:</locations>
+            <supplies>Failed to load supplies:</supplies>
+            <add_victim>Failed to add victim:</add_victim>
+            <add_medical_record>Failed to add medical record:</add_medical_record>
+            <load_victim>Failed to load victim:</load_victim>
+            <select_victim>Please select a victim</select_victim>
+            <delete_victim>Failed to delete victim</delete_victim>
+            <load_medical_record>Failed to load medical record:</load_medical_record>
+            <select_medical_record>Please select a medical record</select_medical_record>
+            <delete_medical_record>Failed to delete medical record:</delete_medical_record>
+        </error>
+        <success>
+            <title>Success</title>
+            <victim_added>Victim added successfully</victim_added>
+            <victim_deleted>Victim deleted successfully</victim_deleted>
+            <medical_record_added>Medical record added successfully</medical_record_added>
+            <deleted>Record deleted successfully</deleted>
+        </success>
+        <validation>
+            <required_fields>Please fill in all required fields</required_fields>
+            <treatment_required>Treatment details are required</treatment_required>
+            <location_required>Please select a location</location_required>
+            <type_required>Supply type is required</type_required>
+            <select_supply>Please select a supply to edit</select_supply>
+        </validation>
+        <gender>
+            <man>Male</man>
+            <woman>Female</woman>
+            <nonbinary>Non-binary</nonbinary>
+        </gender>
+        <location>
+            <unassigned>Not Assigned</unassigned>
+        </location>
+    </gui>
+    <prompt>
+        <choice>Please select an option:</choice>
+    </prompt>
+</translations> 
