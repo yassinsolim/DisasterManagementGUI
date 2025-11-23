@@ -1,6 +1,6 @@
 # DisasterManagementGUI
 
-A modern, user-friendly Java GUI application for disaster response management. This tool helps organizations manage victims, supplies, inquiries, and locations efficiently—now supporting both **English** and **French**!
+A modern, user-friendly Java GUI application for disaster response management. This tool helps organizations manage victims, supplies, inquiries, and locations efficiently, now supporting both **English** and **French**!
 
 ## 🌐 Language Selection
 When you launch the program, you'll be greeted with a language selection screen:
