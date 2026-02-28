@@ -40,3 +40,6 @@ bin/
 out/
 target/
 build/
+
+# === macOS ===
+.DS_Store

@@ -32,9 +32,9 @@ import java.io.IOException;
 public class DatabaseAdapter implements AutoCloseable {
     private static DatabaseAdapter instance;
     private Connection connection;
-    private static final String DB_URL = "jdbc:postgresql://localhost:5432/ensf380project";
-    private static final String USER = "oop";
-    private static final String PASS = "ucalgary";
+    private static final String DB_URL = System.getenv().getOrDefault("DB_URL", "jdbc:postgresql://localhost:5432/ensf380project");
+    private static final String USER = System.getenv().getOrDefault("DB_USER", "oop");
+    private static final String PASS = System.getenv().getOrDefault("DB_PASSWORD", "");
     private boolean isTestMode = false;
     
     // Test mode data
@@ -58,9 +58,9 @@ public class DatabaseAdapter implements AutoCloseable {
         }
         
         try {
-            System.out.println("Attempting to connect to database...");
-            System.out.println("URL: " + getDbUrl());
-            System.out.println("User: " + USER);
+            // TODO: replace with proper logger // System.out.println("Attempting to connect to database...");
+            // TODO: replace with proper logger // System.out.println("URL: " + getDbUrl());
+            // TODO: replace with proper logger // System.out.println("User: " + USER);
             
             // Load the PostgreSQL JDBC driver
             Class.forName("org.postgresql.Driver");
@@ -79,7 +79,7 @@ public class DatabaseAdapter implements AutoCloseable {
                 throw new SQLException("Failed to establish database connection");
             }
             
-            System.out.println("Successfully connected to database");
+            // TODO: replace with proper logger // System.out.println("Successfully connected to database");
         } catch (ClassNotFoundException e) {
             System.err.println("PostgreSQL JDBC Driver not found: " + e.getMessage());
             throw new SQLException("PostgreSQL JDBC Driver not found: " + e.getMessage());
@@ -715,9 +715,9 @@ public class DatabaseAdapter implements AutoCloseable {
                         stmt.executeUpdate();
                     }
                 }
-                System.out.println("Cleaned up " + idsToDelete.size() + " duplicate victim(s)");
+                // TODO: replace with proper logger // System.out.println("Cleaned up " + idsToDelete.size() + " duplicate victim(s)");
             } else {
-                System.out.println("No duplicate victims found");
+                // TODO: replace with proper logger // System.out.println("No duplicate victims found");
             }
         } catch (SQLException e) {
             System.err.println("Error cleaning up duplicate victims: " + e.getMessage());
