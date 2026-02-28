@@ -57,13 +57,6 @@ public class CLIHandler {
         String locations = LanguageLoader.getTranslation("menu.locations");
         String exit = LanguageLoader.getTranslation("menu.exit");
         
-        // TODO: replace with proper logger // System.out.println("\nDEBUG - Menu items:");
-        // TODO: replace with proper logger // System.out.println("Title: '" + title + "'");
-        // TODO: replace with proper logger // System.out.println("Victims: '" + victims + "'");
-        // TODO: replace with proper logger // System.out.println("Supplies: '" + supplies + "'");
-        // TODO: replace with proper logger // System.out.println("Inquiries: '" + inquiries + "'");
-        // TODO: replace with proper logger // System.out.println("Locations: '" + locations + "'");
-        // TODO: replace with proper logger // System.out.println("Exit: '" + exit + "'");
         
         System.out.println("\n" + title);
         System.out.println("1. " + victims);

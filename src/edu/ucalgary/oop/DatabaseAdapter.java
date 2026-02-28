@@ -58,9 +58,6 @@ public class DatabaseAdapter implements AutoCloseable {
         }
         
         try {
-            // TODO: replace with proper logger // System.out.println("Attempting to connect to database...");
-            // TODO: replace with proper logger // System.out.println("URL: " + getDbUrl());
-            // TODO: replace with proper logger // System.out.println("User: " + USER);
             
             // Load the PostgreSQL JDBC driver
             Class.forName("org.postgresql.Driver");
@@ -79,7 +76,6 @@ public class DatabaseAdapter implements AutoCloseable {
                 throw new SQLException("Failed to establish database connection");
             }
             
-            // TODO: replace with proper logger // System.out.println("Successfully connected to database");
         } catch (ClassNotFoundException e) {
             System.err.println("PostgreSQL JDBC Driver not found: " + e.getMessage());
             throw new SQLException("PostgreSQL JDBC Driver not found: " + e.getMessage());
@@ -715,9 +711,7 @@ public class DatabaseAdapter implements AutoCloseable {
                         stmt.executeUpdate();
                     }
                 }
-                // TODO: replace with proper logger // System.out.println("Cleaned up " + idsToDelete.size() + " duplicate victim(s)");
             } else {
-                // TODO: replace with proper logger // System.out.println("No duplicate victims found");
             }
         } catch (SQLException e) {
             System.err.println("Error cleaning up duplicate victims: " + e.getMessage());
