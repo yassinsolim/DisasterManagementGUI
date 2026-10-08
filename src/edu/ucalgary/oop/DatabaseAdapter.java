@@ -58,8 +58,8 @@ public class DatabaseAdapter implements AutoCloseable {
         }
         
         if (PASS == null) {
-            throw new SQLException("DB_PASSWORD is not set. Export DB_PASSWORD before connecting to "
-                + getDbUrl() + "; set it to an empty value if the server uses trust authentication.");
+            throw new SQLException("DB_PASSWORD is not set. Set DB_PASSWORD before connecting; "
+                + "use an empty value if the server uses trust authentication.");
         }
 
         try {

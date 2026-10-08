@@ -28,10 +28,17 @@ Easily add new victims with detailed information:
 
 ### Prerequisites
 - Java 8 or newer
-- (Optional) PostgreSQL database for full functionality
+- PostgreSQL database (required when starting the GUI)
 
 ### 1. Download Dependencies
-All required JARs (PostgreSQL JDBC, JUnit, Hamcrest) are included in the `lib/` folder.
+JARs are ignored by Git, so a fresh clone has no `lib/`. Create that folder
+and download these three files into it:
+
+- [PostgreSQL JDBC 42.7.3](https://repo.maven.apache.org/maven2/org/postgresql/postgresql/42.7.3/postgresql-42.7.3.jar)
+- [JUnit 4.13.2](https://repo.maven.apache.org/maven2/junit/junit/4.13.2/junit-4.13.2.jar)
+- [Hamcrest Core 1.3](https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar)
+
+The classpath separator below is `;` on Windows. Use `:` on Linux or macOS.
 
 ### 2. Compile the Project
 ```sh
@@ -50,7 +57,7 @@ java -cp "out;lib/*" org.junit.runner.JUnitCore edu.ucalgary.oop.AllTests
 ```
 
 ## 🗄️ Database Connectivity
-The application can connect to a PostgreSQL database for persistent data storage. Connection settings come from environment variables, so no credentials live in the source tree.
+The application requires PostgreSQL for persistent data storage. Connection settings come from environment variables, so no credentials need to live in the source tree.
 
 | Variable | Required | Default |
 | --- | --- | --- |
@@ -60,11 +67,22 @@ The application can connect to a PostgreSQL database for persistent data storage
 
 `DB_PASSWORD` has no default. Startup fails with an explicit message when it is unset. Set it to an empty value if your server uses trust authentication:
 
+Windows PowerShell:
+
+```powershell
+$env:DB_URL = "jdbc:postgresql://localhost:5432/ensf380project"
+$env:DB_USER = "oop"
+$env:DB_PASSWORD = "your-password"
+java -cp "out;lib/*" edu.ucalgary.oop.Main
+```
+
+Linux or macOS shell:
+
 ```sh
 export DB_URL="jdbc:postgresql://localhost:5432/ensf380project"
 export DB_USER="oop"
 export DB_PASSWORD="your-password"
-java -cp "out;lib/*" edu.ucalgary.oop.Main
+java -cp "out:lib/*" edu.ucalgary.oop.Main
 ```
 
 If the database is unavailable, `DisasterManagementGUI` reports the connection error in a dialog and exits.
