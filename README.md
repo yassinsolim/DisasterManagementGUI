@@ -50,11 +50,24 @@ java -cp "out;lib/*" org.junit.runner.JUnitCore edu.ucalgary.oop.AllTests
 ```
 
 ## 🗄️ Database Connectivity
-The application can connect to a PostgreSQL database for persistent data storage. By default, it attempts to connect to:
-- `jdbc:postgresql://localhost:5432/ensf380project`
-- User: `oop`
+The application can connect to a PostgreSQL database for persistent data storage. Connection settings come from environment variables, so no credentials live in the source tree.
 
-You can modify these settings in the source code to match your environment. If the database is unavailable, the app may still run in a limited mode.
+| Variable | Required | Default |
+| --- | --- | --- |
+| `DB_URL` | no | `jdbc:postgresql://localhost:5432/ensf380project` |
+| `DB_USER` | no | `oop` |
+| `DB_PASSWORD` | yes | none |
+
+`DB_PASSWORD` has no default. Startup fails with an explicit message when it is unset. Set it to an empty value if your server uses trust authentication:
+
+```sh
+export DB_URL="jdbc:postgresql://localhost:5432/ensf380project"
+export DB_USER="oop"
+export DB_PASSWORD="your-password"
+java -cp "out;lib/*" edu.ucalgary.oop.Main
+```
+
+If the database is unavailable, `DisasterManagementGUI` reports the connection error in a dialog and exits.
 
 ## 💡 Try It Yourself!
 1. Clone this repository.

@@ -34,7 +34,7 @@ public class DatabaseAdapter implements AutoCloseable {
     private Connection connection;
     private static final String DB_URL = System.getenv().getOrDefault("DB_URL", "jdbc:postgresql://localhost:5432/ensf380project");
     private static final String USER = System.getenv().getOrDefault("DB_USER", "oop");
-    private static final String PASS = System.getenv().getOrDefault("DB_PASSWORD", "");
+    private static final String PASS = System.getenv("DB_PASSWORD");
     private boolean isTestMode = false;
     
     // Test mode data
@@ -57,8 +57,12 @@ public class DatabaseAdapter implements AutoCloseable {
             return; // Don't initialize connection in test mode
         }
         
+        if (PASS == null) {
+            throw new SQLException("DB_PASSWORD is not set. Export DB_PASSWORD before connecting to "
+                + getDbUrl() + "; set it to an empty value if the server uses trust authentication.");
+        }
+
         try {
-            
             // Load the PostgreSQL JDBC driver
             Class.forName("org.postgresql.Driver");
             
@@ -711,7 +715,6 @@ public class DatabaseAdapter implements AutoCloseable {
                         stmt.executeUpdate();
                     }
                 }
-            } else {
             }
         } catch (SQLException e) {
             System.err.println("Error cleaning up duplicate victims: " + e.getMessage());

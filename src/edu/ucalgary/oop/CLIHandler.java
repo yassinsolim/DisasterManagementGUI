@@ -56,8 +56,7 @@ public class CLIHandler {
         String inquiries = LanguageLoader.getTranslation("menu.inquiries");
         String locations = LanguageLoader.getTranslation("menu.locations");
         String exit = LanguageLoader.getTranslation("menu.exit");
-        
-        
+
         System.out.println("\n" + title);
         System.out.println("1. " + victims);
         System.out.println("2. " + supplies);
