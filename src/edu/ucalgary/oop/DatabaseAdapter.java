@@ -3,15 +3,12 @@ package edu.ucalgary.oop;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Pattern;
 import java.net.URLDecoder;
 import java.io.UnsupportedEncodingException;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 /**
  * DatabaseAdapter.java
@@ -38,6 +35,7 @@ public class DatabaseAdapter implements AutoCloseable {
     private static final String DEFAULT_DB_USER = "oop";
     private static final String CONNECTION_FAILURE =
         "Database connection failed. Check DB_URL, DB_USER, DB_PASSWORD and server availability.";
+    private static final Pattern SQLSTATE_PATTERN = Pattern.compile("[0-9A-Z]{5}");
     private boolean isTestMode = false;
     
     // Test mode data
@@ -117,6 +115,20 @@ public class DatabaseAdapter implements AutoCloseable {
         }
     }
 
+    private static void logSqlError(String operation, SQLException error) {
+        // Call only with fixed operation labels. JDBC messages can include query data.
+        StringBuilder message = new StringBuilder(operation);
+        String state = error.getSQLState();
+        if (state != null && SQLSTATE_PATTERN.matcher(state).matches()) {
+            message.append(" [SQLSTATE ").append(state).append(']');
+        }
+        int code = error.getErrorCode();
+        if (code != 0) {
+            message.append(" [vendor code ").append(code).append(']');
+        }
+        ErrorLogger.logError(message.toString());
+    }
+
     public static DatabaseAdapter createTestInstance() throws SQLException {
         return new DatabaseAdapter(true);
     }
@@ -147,7 +159,7 @@ public class DatabaseAdapter implements AutoCloseable {
                 return rs.getInt("inquiry_id");
             }
         } catch (SQLException e) {
-            new ErrorLogger().logError("Error adding external inquiry: " + e.getMessage());
+            logSqlError("Error adding external inquiry", e);
         }
         return -1;
     }
@@ -171,7 +183,7 @@ public class DatabaseAdapter implements AutoCloseable {
                 inquiries.add(inquiry);
             }
         } catch (SQLException e) {
-            new ErrorLogger().logError("Error getting external inquiries: " + e.getMessage());
+            logSqlError("Error getting external inquiries", e);
         }
         return inquiries;
     }
@@ -187,7 +199,7 @@ public class DatabaseAdapter implements AutoCloseable {
             pstmt.setInt(2, inquiry.getInquiryID());
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            new ErrorLogger().logError("Error updating external inquiry: " + e.getMessage());
+            logSqlError("Error updating external inquiry", e);
             return false;
         }
     }
@@ -206,7 +218,7 @@ public class DatabaseAdapter implements AutoCloseable {
                 return rs.getInt("inquiry_id");
             }
         } catch (SQLException e) {
-            new ErrorLogger().logError("Error adding victim inquiry: " + e.getMessage());
+            logSqlError("Error adding victim inquiry", e);
         }
         return -1;
     }
@@ -226,7 +238,7 @@ public class DatabaseAdapter implements AutoCloseable {
                 inquiries.add(inquiry);
             }
         } catch (SQLException e) {
-            new ErrorLogger().logError("Error getting victim inquiries: " + e.getMessage());
+            logSqlError("Error getting victim inquiries", e);
         }
         return inquiries;
     }
@@ -239,7 +251,7 @@ public class DatabaseAdapter implements AutoCloseable {
             pstmt.setInt(2, inquiry.getInquiryID());
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            new ErrorLogger().logError("Error updating victim inquiry: " + e.getMessage());
+            logSqlError("Error updating victim inquiry", e);
             return false;
         }
     }
@@ -250,7 +262,7 @@ public class DatabaseAdapter implements AutoCloseable {
             pstmt.setInt(1, inquiryId);
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            new ErrorLogger().logError("Error deleting inquiry: " + e.getMessage());
+            logSqlError("Error deleting inquiry", e);
             return false;
         }
     }
@@ -350,15 +362,15 @@ public class DatabaseAdapter implements AutoCloseable {
             try {
                 connection.rollback();
             } catch (SQLException rollbackEx) {
-                new ErrorLogger().logError("Error rolling back transaction: " + rollbackEx.getMessage());
+                logSqlError("Error rolling back transaction", rollbackEx);
             }
-            new ErrorLogger().logError("Error adding victim: " + e.getMessage());
+            logSqlError("Error adding victim", e);
             return -1;
         } finally {
             try {
                 connection.setAutoCommit(true);
             } catch (SQLException e) {
-                new ErrorLogger().logError("Error resetting auto-commit: " + e.getMessage());
+                logSqlError("Error resetting auto-commit", e);
             }
         }
     }
@@ -460,15 +472,15 @@ public class DatabaseAdapter implements AutoCloseable {
             try {
                 connection.rollback();
             } catch (SQLException rollbackEx) {
-                new ErrorLogger().logError("Error rolling back transaction: " + rollbackEx.getMessage());
+                logSqlError("Error rolling back transaction", rollbackEx);
             }
-            new ErrorLogger().logError("Error deleting victim: " + e.getMessage());
+            logSqlError("Error deleting victim", e);
             return false;
         } finally {
             try {
                 connection.setAutoCommit(true);
             } catch (SQLException e) {
-                new ErrorLogger().logError("Error resetting auto-commit: " + e.getMessage());
+                logSqlError("Error resetting auto-commit", e);
             }
         }
     }
@@ -550,7 +562,7 @@ public class DatabaseAdapter implements AutoCloseable {
             pstmt.setInt(1, itemId);
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            new ErrorLogger().logError("Error deleting item: " + e.getMessage());
+            logSqlError("Error deleting item", e);
             return false;
         }
     }
@@ -572,7 +584,7 @@ public class DatabaseAdapter implements AutoCloseable {
             pstmt.setString(6, item.getGrid());
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            new ErrorLogger().logError("Error adding item: " + e.getMessage());
+            logSqlError("Error adding item", e);
             return false;
         }
     }
@@ -595,7 +607,7 @@ public class DatabaseAdapter implements AutoCloseable {
             pstmt.setInt(7, item.getItemID());
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            new ErrorLogger().logError("Error updating item: " + e.getMessage());
+            logSqlError("Error updating item", e);
             return false;
         }
     }
@@ -611,7 +623,7 @@ public class DatabaseAdapter implements AutoCloseable {
                 try {
                     itemType = Enum.valueOf(ItemType.class, itemTypeStr);
                 } catch (IllegalArgumentException e) {
-                    new ErrorLogger().logError("Invalid item type in database: " + itemTypeStr);
+                    ErrorLogger.logError("Invalid item type in database.");
                     continue;
                 }
                 
@@ -634,7 +646,7 @@ public class DatabaseAdapter implements AutoCloseable {
                 items.add(item);
             }
         } catch (SQLException e) {
-            new ErrorLogger().logError("Error getting items: " + e.getMessage());
+            logSqlError("Error getting items", e);
         }
         return items;
     }
@@ -650,7 +662,7 @@ public class DatabaseAdapter implements AutoCloseable {
                 try {
                     itemType = Enum.valueOf(ItemType.class, itemTypeStr);
                 } catch (IllegalArgumentException e) {
-                    new ErrorLogger().logError("Invalid item type in database: " + itemTypeStr);
+                    ErrorLogger.logError("Invalid item type in database.");
                     return null;
                 }
                 
@@ -672,7 +684,7 @@ public class DatabaseAdapter implements AutoCloseable {
                 );
             }
         } catch (SQLException e) {
-            new ErrorLogger().logError("Error getting item: " + e.getMessage());
+            logSqlError("Error getting item", e);
         }
         return null;
     }
@@ -963,7 +975,7 @@ public class DatabaseAdapter implements AutoCloseable {
             // Clean up expired/obsolete data
             cleanupExpiredData();
         } catch (SQLException e) {
-            logError("Database initialization error: " + e.getMessage());
+            logSqlError("Database initialization error", e);
             throw e;
         }
     }
@@ -971,20 +983,6 @@ public class DatabaseAdapter implements AutoCloseable {
     private void cleanupExpiredData() throws SQLException {
         // Add any necessary cleanup logic here
         // For example, if you have any temporary or expired data that needs to be removed
-    }
-
-    private void logError(String message) {
-        try {
-            // Create data directory if it doesn't exist
-            new File("data").mkdirs();
-            
-            // Append to error log
-            try (FileWriter writer = new FileWriter("data/errorlog.txt", true)) {
-                writer.write(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + " - " + message + "\n");
-            }
-        } catch (IOException e) {
-            System.err.println("Failed to write to error log: " + e.getMessage());
-        }
     }
 
     public DisasterVictim getVictimById(int victimId) throws SQLException {

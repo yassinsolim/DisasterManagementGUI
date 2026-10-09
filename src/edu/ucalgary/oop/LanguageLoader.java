@@ -40,7 +40,7 @@ public class LanguageLoader {
      */
     public static boolean initialize(String languageCode) {
         if (languageCode == null || !LANG_CODE_PATTERN.matcher(languageCode).matches()) {
-            ErrorLogger.logError("Invalid language code format: " + languageCode);
+            ErrorLogger.logError("Invalid language code format.");
             currentLanguage = DEFAULT_LANG;
             loadDefaultTranslations();
             return false;

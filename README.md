@@ -62,6 +62,12 @@ java -cp "out;lib/*" org.junit.runner.JUnitCore edu.ucalgary.oop.AllTests
 java -cp "out;lib/*" org.junit.runner.JUnitCore edu.ucalgary.oop.DatabaseAdapterLifecycleIntegrationTest
 ```
 
+Run `DatabaseAdapterLoggingIntegrationTest` separately against the same disposable database, from an empty scratch directory with no `error.log`. Use absolute paths to the compiled `out` and `lib` directories, since this test creates and removes its own log file:
+
+```sh
+java -cp "<repo>/out;<repo>/lib/*" org.junit.runner.JUnitCore edu.ucalgary.oop.DatabaseAdapterLoggingIntegrationTest
+```
+
 ## 🗄️ Database Connectivity
 The application uses PostgreSQL. Runtime credentials come from environment variables; they must not be committed to this repository.
 
@@ -95,7 +101,7 @@ java -cp "out:lib/*" edu.ucalgary.oop.Main
 
 If the database is unavailable, the GUI shows a generic connection error and exits. Raw JDBC errors can contain the connection URL, so they are not displayed or logged during connection setup. A `.env` file is ignored by Git but is not loaded automatically; set the variables in the process environment.
 
-This generic error handling covers connection setup only. SQL operation errors may include application data in `error.log`; restrict access to logs and do not publish them.
+New `DatabaseAdapter` SQL-error entries in `error.log` contain a fixed operation label and, when available, a validated SQLSTATE or numeric vendor code. They omit raw JDBC exception text. This does not sanitize exceptions propagated to the CLI or GUI. Logs created by older versions, including `data/errorlog.txt`, may still contain application data; restrict access to them and do not publish them.
 
 Database credentials previously committed to this repository remain in public history. The database owner must revoke or rotate them and audit any exposure before using this application. Removing credentials from current source or adding ignore rules does not revoke or erase them.
 
