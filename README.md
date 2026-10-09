@@ -79,7 +79,7 @@ The application uses PostgreSQL. Runtime credentials come from environment varia
 
 `DB_USER` and `DB_PASSWORD` supply the connection credentials. Do not put credentials in `DB_URL`: URL userinfo and `user`/`password` query options are rejected because PostgreSQL JDBC would give URL options precedence. Other URL options remain available. For a remote server, configure certificate-validated TLS (for example, `?sslmode=verify-full` with a trusted CA); the defaults do not guarantee it.
 
-`DB_PASSWORD` has no default. Startup fails with an explicit message when it is unset. Set it to an empty value only if your server intentionally uses trust authentication:
+`DB_PASSWORD` has no default. When it is unset, `DatabaseAdapter` raises an explicit, credential-free error; the GUI shows a generic database dialog. Set the variable to an empty value only if your server intentionally uses trust authentication:
 
 Windows PowerShell:
 
