@@ -7,6 +7,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.net.URLDecoder;
+import java.io.UnsupportedEncodingException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -32,18 +34,15 @@ import java.io.IOException;
 public class DatabaseAdapter implements AutoCloseable {
     private static DatabaseAdapter instance;
     private Connection connection;
-    private static final String DB_URL = System.getenv().getOrDefault("DB_URL", "jdbc:postgresql://localhost:5432/ensf380project");
-    private static final String USER = System.getenv().getOrDefault("DB_USER", "oop");
-    private static final String PASS = System.getenv("DB_PASSWORD");
+    private static final String DEFAULT_DB_URL = "jdbc:postgresql://localhost:5432/ensf380project";
+    private static final String DEFAULT_DB_USER = "oop";
+    private static final String CONNECTION_FAILURE =
+        "Database connection failed. Check DB_URL, DB_USER, DB_PASSWORD and server availability.";
     private boolean isTestMode = false;
     
     // Test mode data
     private List<DisasterVictim> testVictims = new ArrayList<>();
     private int nextTestVictimId = 1;
-
-    protected String getDbUrl() {
-        return DB_URL;
-    }
 
     private DatabaseAdapter(boolean isTestMode) throws SQLException {
         this.isTestMode = isTestMode;
@@ -53,40 +52,68 @@ public class DatabaseAdapter implements AutoCloseable {
     }
 
     private void initializeConnection() throws SQLException {
-        if (isTestMode) {
-            return; // Don't initialize connection in test mode
-        }
-        
-        if (PASS == null) {
+        String password = System.getenv("DB_PASSWORD");
+        if (password == null) {
             throw new SQLException("DB_PASSWORD is not set. Set DB_PASSWORD before connecting; "
                 + "use an empty value if the server uses trust authentication.");
         }
 
+        String url = System.getenv().getOrDefault("DB_URL", DEFAULT_DB_URL);
+        validateCredentialFreeUrl(url);
+
         try {
-            // Load the PostgreSQL JDBC driver
             Class.forName("org.postgresql.Driver");
-            
-            // Set connection properties
             Properties props = new Properties();
-            props.setProperty("user", USER);
-            props.setProperty("password", PASS);
-            props.setProperty("ssl", "false");
-            
-            // Create the connection
-            connection = DriverManager.getConnection(getDbUrl(), props);
-            
+            props.setProperty("user", System.getenv().getOrDefault("DB_USER", DEFAULT_DB_USER));
+            props.setProperty("password", password);
+            connection = DriverManager.getConnection(url, props);
             if (connection == null) {
-                System.err.println("Failed to establish database connection: connection is null");
-                throw new SQLException("Failed to establish database connection");
+                throw new SQLException("No database connection available");
             }
-            
         } catch (ClassNotFoundException e) {
-            System.err.println("PostgreSQL JDBC Driver not found: " + e.getMessage());
-            throw new SQLException("PostgreSQL JDBC Driver not found: " + e.getMessage());
-        } catch (SQLException e) {
-            System.err.println("Database connection error: " + e.getMessage());
-            new ErrorLogger().logError("Database connection error: " + e.getMessage());
-            throw e;
+            throw new SQLException("PostgreSQL JDBC driver not found. Add the driver JAR to the classpath.");
+        } catch (SQLException | RuntimeException e) {
+            // Driver messages can contain the entire URL, including embedded credentials.
+            ErrorLogger.logError(CONNECTION_FAILURE);
+            throw new SQLException(CONNECTION_FAILURE);
+        }
+    }
+
+    static void validateCredentialFreeUrl(String url) throws SQLException {
+        // PostgreSQL JDBC URL options take precedence over connection properties.
+        // Reject URL credentials so DB_USER and DB_PASSWORD cannot be bypassed.
+        if (url.startsWith("jdbc:postgresql://")) {
+            int start = "jdbc:postgresql://".length();
+            int end = url.length();
+            int path = url.indexOf('/', start);
+            int query = url.indexOf('?', start);
+            if (path >= 0 && path < end) end = path;
+            if (query >= 0 && query < end) end = query;
+            int at = url.indexOf('@', start);
+            if (at >= 0 && at < end) {
+                throw new SQLException("DB_URL must not contain credentials. Use DB_USER and DB_PASSWORD.");
+            }
+        }
+
+        int query = url.indexOf('?');
+        if (query < 0) return;
+        for (int start = query + 1; start < url.length();) {
+            int end = url.indexOf('&', start);
+            if (end < 0) end = url.length();
+            int equals = url.indexOf('=', start);
+            if (equals < 0 || equals > end) equals = end;
+            String key;
+            try {
+                key = URLDecoder.decode(url.substring(start, equals), "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                throw new AssertionError("UTF-8 is required by Java");
+            } catch (IllegalArgumentException e) {
+                throw new SQLException("DB_URL has invalid connection options.");
+            }
+            if ("user".equalsIgnoreCase(key) || "password".equalsIgnoreCase(key)) {
+                throw new SQLException("DB_URL must not contain credentials. Use DB_USER and DB_PASSWORD.");
+            }
+            start = end + 1;
         }
     }
 
@@ -99,41 +126,10 @@ public class DatabaseAdapter implements AutoCloseable {
     }
 
     public static DatabaseAdapter getInstance() throws SQLException {
-        if (instance == null) {
+        if (instance == null || instance.connection == null || instance.connection.isClosed()) {
             instance = createInstance();
         }
         return instance;
-    }
-
-    public ResultSet fetch(String query) throws SQLException {
-        if (isTestMode) {
-            return null;
-        }
-        if (connection == null) {
-            throw new SQLException("No database connection available");
-        }
-        Statement stmt = connection.createStatement();
-        return stmt.executeQuery(query);
-    }
-
-    public int update(String sql) throws SQLException {
-        if (isTestMode) {
-            return 0;
-        }
-        if (connection == null) {
-            throw new SQLException("No database connection available");
-        }
-        Statement stmt = connection.createStatement();
-        return stmt.executeUpdate(sql);
-    }
-
-    // ✅ Aliases for compatibility
-    public int saveData(String sql) throws SQLException {
-        return update(sql);
-    }
-
-    public int updateData(String sql) throws SQLException {
-        return update(sql);
     }
 
     // External Inquiry Methods
@@ -528,14 +524,17 @@ public class DatabaseAdapter implements AutoCloseable {
             try {
                 connection.close();
             } catch (SQLException e) {
-                new ErrorLogger().logError("Error closing connection: " + e.getMessage());
+                ErrorLogger.logError("Error closing database connection.");
             }
+        }
+        if (instance == this) {
+            instance = null;
         }
     }
 
     @Override
     public String toString() {
-        return "DatabaseAdapter: Connected to ensf380project";
+        return "DatabaseAdapter";
     }
 
     public Connection getConnection() {
@@ -717,8 +716,7 @@ public class DatabaseAdapter implements AutoCloseable {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error cleaning up duplicate victims: " + e.getMessage());
-            e.printStackTrace();
+            ErrorLogger.logError("Error cleaning up duplicate victims.");
         }
     }
 

@@ -1,13 +1,7 @@
 package edu.ucalgary.oop;
 
-import java.util.Scanner;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.sql.ResultSet;
 import java.util.List;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.regex.Pattern;
 
@@ -17,7 +11,6 @@ import java.util.regex.Pattern;
  * input processing, and command execution.
  */
 public class CLIHandler {
-    private final Scanner scanner;
     private final DatabaseAdapter dbAdapter;
     private boolean running;
     private InputHandler inputHandler;
@@ -28,7 +21,6 @@ public class CLIHandler {
      * @param dbAdapter The database adapter for data operations
      */
     public CLIHandler(DatabaseAdapter dbAdapter) {
-        this.scanner = new Scanner(System.in);
         this.dbAdapter = dbAdapter;
         this.running = true;
         this.inputHandler = new InputHandler();
@@ -880,11 +872,4 @@ public class CLIHandler {
         System.out.println("Address: " + location.getAddress());
     }
 
-    private void logError(String message) {
-        try (FileWriter writer = new FileWriter("data/errorlog.txt", true)) {
-            writer.write(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + " - " + message + "\n");
-        } catch (IOException e) {
-            System.err.println("Failed to write to error log: " + e.getMessage());
-        }
-    }
 } 

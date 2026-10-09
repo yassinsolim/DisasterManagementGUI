@@ -73,12 +73,10 @@ public class LanguageLoader {
      */
     private static boolean loadLanguage(String languageCode) {
         try {
-            System.out.println("Attempting to load language file: " + languageCode);
             // Try to load from the system property path first
             String customPath = System.getProperty("language.file.path");
             if (customPath != null) {
                 File langFile = new File(customPath, languageCode + ".xml");
-                System.out.println("Checking custom path: " + langFile.getAbsolutePath());
                 if (langFile.exists()) {
                     InputStream inputStream = new FileInputStream(langFile);
                     DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -94,23 +92,19 @@ public class LanguageLoader {
             File dataDir = new File("data");
             if (dataDir.exists() && dataDir.isDirectory()) {
                 File langFile = new File(dataDir, languageCode + ".xml");
-                System.out.println("Checking data directory: " + langFile.getAbsolutePath());
                 if (langFile.exists()) {
-                    System.out.println("Found language file in data directory");
                     InputStream inputStream = new FileInputStream(langFile);
                     DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
                     DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
                     Document doc = dBuilder.parse(new InputSource(inputStream));
                     doc.getDocumentElement().normalize();
                     processElement(doc.getDocumentElement(), "");
-                    System.out.println("Successfully loaded translations. Available keys: " + translations.keySet());
                     return true;
                 }
             }
             
             // Fall back to classpath resources
             String resourcePath = "/languages/" + languageCode + ".xml";
-            System.out.println("Checking classpath: " + resourcePath);
             InputStream inputStream = LanguageLoader.class.getResourceAsStream(resourcePath);
             if (inputStream != null) {
                 DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -125,8 +119,7 @@ public class LanguageLoader {
             System.err.println("Language file not found: " + languageCode);
             return false;
         } catch (Exception e) {
-            System.err.println("Failed to load language file: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Failed to load language file: " + languageCode);
             return false;
         }
     }
@@ -189,7 +182,6 @@ public class LanguageLoader {
                     (child.getChildNodes().getLength() == 1 && 
                      child.getFirstChild().getNodeType() == Node.TEXT_NODE)) {
                     String value = child.getTextContent().trim();
-                    System.out.println("Adding translation: " + key + " = " + value);
                     translations.put(key, value);
                 } else {
                     // Otherwise, recursively process its children

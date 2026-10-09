@@ -56,8 +56,14 @@ javac -cp "lib/*;out" -d out test/edu/ucalgary/oop/*.java
 java -cp "out;lib/*" org.junit.runner.JUnitCore edu.ucalgary.oop.AllTests
 ```
 
+`AllTests` uses test-mode adapters and does not connect to PostgreSQL. To test connection reuse, first set `DB_URL`, `DB_USER`, and `DB_PASSWORD` to a disposable local PostgreSQL database with scratch credentials. Then run this separate integration suite (replace `;` with `:` on Linux or macOS):
+
+```sh
+java -cp "out;lib/*" org.junit.runner.JUnitCore edu.ucalgary.oop.DatabaseAdapterLifecycleIntegrationTest
+```
+
 ## 🗄️ Database Connectivity
-The application requires PostgreSQL for persistent data storage. Connection settings come from environment variables, so no credentials need to live in the source tree.
+The application uses PostgreSQL. Runtime credentials come from environment variables; they must not be committed to this repository.
 
 | Variable | Required | Default |
 | --- | --- | --- |
@@ -65,7 +71,9 @@ The application requires PostgreSQL for persistent data storage. Connection sett
 | `DB_USER` | no | `oop` |
 | `DB_PASSWORD` | yes | none |
 
-`DB_PASSWORD` has no default. Startup fails with an explicit message when it is unset. Set it to an empty value if your server uses trust authentication:
+`DB_USER` and `DB_PASSWORD` supply the connection credentials. Do not put credentials in `DB_URL`: URL userinfo and `user`/`password` query options are rejected because PostgreSQL JDBC would give URL options precedence. Other URL options remain available. For a remote server, configure certificate-validated TLS (for example, `?sslmode=verify-full` with a trusted CA); the defaults do not guarantee it.
+
+`DB_PASSWORD` has no default. Startup fails with an explicit message when it is unset. Set it to an empty value only if your server intentionally uses trust authentication:
 
 Windows PowerShell:
 
@@ -85,7 +93,11 @@ export DB_PASSWORD="your-password"
 java -cp "out:lib/*" edu.ucalgary.oop.Main
 ```
 
-If the database is unavailable, `DisasterManagementGUI` reports the connection error in a dialog and exits.
+If the database is unavailable, the GUI shows a generic connection error and exits. Raw JDBC errors can contain the connection URL, so they are not displayed or logged during connection setup. A `.env` file is ignored by Git but is not loaded automatically; set the variables in the process environment.
+
+This generic error handling covers connection setup only. SQL operation errors may include application data in `error.log`; restrict access to logs and do not publish them.
+
+Database credentials previously committed to this repository remain in public history. The database owner must revoke or rotate them and audit any exposure before using this application. Removing credentials from current source or adding ignore rules does not revoke or erase them.
 
 ## 💡 Try It Yourself!
 1. Clone this repository.

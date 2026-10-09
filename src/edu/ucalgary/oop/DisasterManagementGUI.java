@@ -104,6 +104,14 @@ public class DisasterManagementGUI extends JFrame {
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if (dbAdapter != null) {
+                    dbAdapter.closeConnection();
+                }
+            }
+        });
     }
 
     private void initializeDatabase() {
@@ -782,8 +790,6 @@ public class DisasterManagementGUI extends JFrame {
     private void showUpdateSupplyDialog(int id, String currentType, String currentComments) {
         String translationKey = "gui.dialog.update_supply";
         String translatedTitle = LanguageLoader.getTranslation(translationKey);
-        System.out.println("Translation key: " + translationKey);
-        System.out.println("Translated title: " + translatedTitle);
         JDialog dialog = new JDialog(this, translatedTitle, true);
         dialog.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
