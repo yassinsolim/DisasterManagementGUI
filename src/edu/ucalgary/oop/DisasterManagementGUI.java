@@ -118,7 +118,7 @@ public class DisasterManagementGUI extends JFrame {
         try {
             dbAdapter = DatabaseAdapter.createInstance();
         } catch (Exception e) {
-            showError("Database Error", "Failed to connect to database: " + e.getMessage());
+            showError("Database Error", "Failed to connect to database: " + errorMessageForDialog(e));
             System.exit(1);
         }
     }
@@ -215,6 +215,10 @@ public class DisasterManagementGUI extends JFrame {
         JOptionPane.showMessageDialog(this, message, LanguageLoader.getTranslation("gui.error.title"), JOptionPane.ERROR_MESSAGE);
     }
 
+    static String errorMessageForDialog(Throwable error) {
+        return UserFacingErrors.message(error);
+    }
+
     private void showSuccess(String title, String message) {
         JOptionPane.showMessageDialog(this, message, title, JOptionPane.INFORMATION_MESSAGE);
     }
@@ -283,7 +287,7 @@ public class DisasterManagementGUI extends JFrame {
             }
         } catch (SQLException e) {
             showError(LanguageLoader.getTranslation("gui.error.title"), 
-                     LanguageLoader.getTranslation("gui.error.locations") + " " + e.getMessage());
+                     LanguageLoader.getTranslation("gui.error.locations") + " " + errorMessageForDialog(e));
         }
         dialog.add(locationCombo, gbc);
 
@@ -336,7 +340,7 @@ public class DisasterManagementGUI extends JFrame {
                           LanguageLoader.getTranslation("gui.success.victim_added"));
             } catch (SQLException ex) {
                 showError(LanguageLoader.getTranslation("gui.error.title"), 
-                         LanguageLoader.getTranslation("gui.error.add_victim") + " " + ex.getMessage());
+                         LanguageLoader.getTranslation("gui.error.add_victim") + " " + errorMessageForDialog(ex));
             } catch (DateTimeParseException ex) {
                 showError(LanguageLoader.getTranslation("gui.error.title"), 
                          LanguageLoader.getTranslation("gui.error.invalid_date"));
@@ -368,7 +372,7 @@ public class DisasterManagementGUI extends JFrame {
             victims.forEach(victimCombo::addItem);
         } catch (SQLException e) {
             showError(LanguageLoader.getTranslation("gui.error.title"), 
-                     LanguageLoader.getTranslation("gui.error.victims") + " " + e.getMessage());
+                     LanguageLoader.getTranslation("gui.error.victims") + " " + errorMessageForDialog(e));
         }
         dialog.add(victimCombo, gbc);
 
@@ -423,7 +427,7 @@ public class DisasterManagementGUI extends JFrame {
             locations.forEach(locationCombo::addItem);
         } catch (SQLException e) {
             showError(LanguageLoader.getTranslation("gui.error.title"), 
-                     LanguageLoader.getTranslation("gui.error.locations") + " " + e.getMessage());
+                     LanguageLoader.getTranslation("gui.error.locations") + " " + errorMessageForDialog(e));
         }
         dialog.add(locationCombo, gbc);
 
@@ -478,7 +482,7 @@ public class DisasterManagementGUI extends JFrame {
                     JOptionPane.showMessageDialog(this, "Victime mise à jour avec succès!");
                 }
             } catch (Exception ex) {
-                showError("Erreur", "Échec de la mise à jour de la victime: " + ex.getMessage());
+                showError("Erreur", "Échec de la mise à jour de la victime: " + errorMessageForDialog(ex));
             }
         });
 
@@ -535,7 +539,7 @@ public class DisasterManagementGUI extends JFrame {
             }
         } catch (SQLException e) {
             showError(LanguageLoader.getTranslation("gui.error.title"), 
-                     LanguageLoader.getTranslation("gui.error.victims") + " " + e.getMessage());
+                     LanguageLoader.getTranslation("gui.error.victims") + " " + errorMessageForDialog(e));
         }
 
         // Add buttons panel
@@ -558,7 +562,7 @@ public class DisasterManagementGUI extends JFrame {
                     }
                 } catch (SQLException ex) {
                     showError(LanguageLoader.getTranslation("gui.error.title"),
-                            LanguageLoader.getTranslation("gui.error.load_victim") + " " + ex.getMessage());
+                            LanguageLoader.getTranslation("gui.error.load_victim") + " " + errorMessageForDialog(ex));
                 }
             } else {
                 showError(LanguageLoader.getTranslation("gui.error.title"),
@@ -594,7 +598,7 @@ public class DisasterManagementGUI extends JFrame {
             victims.forEach(victimCombo::addItem);
         } catch (SQLException e) {
             showError(LanguageLoader.getTranslation("gui.error.title"), 
-                     LanguageLoader.getTranslation("gui.error.victims") + " " + e.getMessage());
+                     LanguageLoader.getTranslation("gui.error.victims") + " " + errorMessageForDialog(e));
         }
         dialog.add(victimCombo, gbc);
 
@@ -632,7 +636,7 @@ public class DisasterManagementGUI extends JFrame {
                 }
             } catch (Exception ex) {
                 showError(LanguageLoader.getTranslation("messages.e"),
-                         LanguageLoader.getTranslation("gui.e.delete_victim") + " " + ex.getMessage());
+                         LanguageLoader.getTranslation("gui.e.delete_victim") + " " + errorMessageForDialog(ex));
             }
         });
 
@@ -708,7 +712,7 @@ public class DisasterManagementGUI extends JFrame {
                           LanguageLoader.getTranslation("gui.success.supply_added"));
             } catch (SQLException ex) {
                 showError(LanguageLoader.getTranslation("gui.error.title"),
-                         LanguageLoader.getTranslation("gui.error.add_supply") + " " + ex.getMessage());
+                         LanguageLoader.getTranslation("gui.error.add_supply") + " " + errorMessageForDialog(ex));
             }
         });
 
@@ -747,7 +751,7 @@ public class DisasterManagementGUI extends JFrame {
             }
         } catch (SQLException e) {
             showError(LanguageLoader.getTranslation("gui.error.title"),
-                     LanguageLoader.getTranslation("gui.error.load_supplies") + " " + e.getMessage());
+                     LanguageLoader.getTranslation("gui.error.load_supplies") + " " + errorMessageForDialog(e));
             return;
         }
 
@@ -848,7 +852,7 @@ public class DisasterManagementGUI extends JFrame {
                           LanguageLoader.getTranslation("gui.success.supply_updated"));
             } catch (SQLException ex) {
                 showError(LanguageLoader.getTranslation("gui.error.title"),
-                         LanguageLoader.getTranslation("gui.error.update_supply") + " " + ex.getMessage());
+                         LanguageLoader.getTranslation("gui.error.update_supply") + " " + errorMessageForDialog(ex));
             }
         });
 
@@ -891,7 +895,7 @@ public class DisasterManagementGUI extends JFrame {
             }
         } catch (SQLException e) {
             showError(LanguageLoader.getTranslation("messages.e"),
-                     LanguageLoader.getTranslation("messages.load_error").replace("{0}", e.getMessage()));
+                     LanguageLoader.getTranslation("messages.load_error").replace("{0}", errorMessageForDialog(e)));
         }
         dialog.add(supplyCombo, gbc);
 
@@ -923,7 +927,7 @@ public class DisasterManagementGUI extends JFrame {
                 }
             } catch (SQLException ex) {
                 showError(LanguageLoader.getTranslation("messages.e"),
-                         LanguageLoader.getTranslation("messages.delete_error").replace("{0}", ex.getMessage()));
+                         LanguageLoader.getTranslation("messages.delete_error").replace("{0}", errorMessageForDialog(ex)));
             }
         });
 
@@ -1042,7 +1046,7 @@ public class DisasterManagementGUI extends JFrame {
                 showViewInquiriesDialog();
             } catch (Exception ex) {
                 showError(LanguageLoader.getTranslation("messages.error"), 
-                         LanguageLoader.getTranslation("messages.save_error").replace("{0}", ex.getMessage()));
+                         LanguageLoader.getTranslation("messages.save_error").replace("{0}", errorMessageForDialog(ex)));
             }
         });
 
@@ -1122,7 +1126,7 @@ public class DisasterManagementGUI extends JFrame {
             }
         } catch (SQLException e) {
             showError(LanguageLoader.getTranslation("messages.error"),
-                     LanguageLoader.getTranslation("messages.load_error").replace("{0}", e.getMessage()));
+                     LanguageLoader.getTranslation("messages.load_error").replace("{0}", errorMessageForDialog(e)));
             return;
         }
 
@@ -1249,7 +1253,7 @@ public class DisasterManagementGUI extends JFrame {
                               LanguageLoader.getTranslation("messages.updated"));
                 } catch (SQLException ex) {
                     showError(LanguageLoader.getTranslation("messages.e"),
-                            LanguageLoader.getTranslation("messages.update_error").replace("{0}", ex.getMessage()));
+                            LanguageLoader.getTranslation("messages.update_error").replace("{0}", errorMessageForDialog(ex)));
                 }
             });
 
@@ -1265,7 +1269,7 @@ public class DisasterManagementGUI extends JFrame {
 
         } catch (SQLException e) {
             showError(LanguageLoader.getTranslation("messages.e"),
-                     LanguageLoader.getTranslation("messages.load_error").replace("{0}", e.getMessage()));
+                     LanguageLoader.getTranslation("messages.load_error").replace("{0}", errorMessageForDialog(e)));
         }
     }
 
@@ -1361,7 +1365,7 @@ public class DisasterManagementGUI extends JFrame {
                 });
             }
         } catch (SQLException e) {
-            showError("Erreur", "Échec du chargement des demandes: " + e.getMessage());
+            showError("Erreur", "Échec du chargement des demandes: " + errorMessageForDialog(e));
         }
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
@@ -1441,7 +1445,7 @@ public class DisasterManagementGUI extends JFrame {
             }
         } catch (SQLException e) {
             showError(LanguageLoader.getTranslation("gui.e.title"), 
-                     LanguageLoader.getTranslation("messages.load_error").replace("{0}", e.getMessage()));
+                     LanguageLoader.getTranslation("messages.load_error").replace("{0}", errorMessageForDialog(e)));
         }
     }
 
@@ -1479,7 +1483,7 @@ public class DisasterManagementGUI extends JFrame {
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this,
-                LanguageLoader.getTranslation("messages.load_error").replace("{0}", e.getMessage()),
+                LanguageLoader.getTranslation("messages.load_error").replace("{0}", errorMessageForDialog(e)),
                 LanguageLoader.getTranslation("messages.e"),
                 JOptionPane.ERROR_MESSAGE);
             return;
@@ -1575,7 +1579,7 @@ public class DisasterManagementGUI extends JFrame {
                 showViewLocationsDialog();
             } catch (Exception ex) {
                 showError(LanguageLoader.getTranslation("messages.error"), 
-                         LanguageLoader.getTranslation("messages.save_error").replace("{0}", ex.getMessage()));
+                         LanguageLoader.getTranslation("messages.save_error").replace("{0}", errorMessageForDialog(ex)));
             }
         });
 
@@ -1619,7 +1623,7 @@ public class DisasterManagementGUI extends JFrame {
             }
         } catch (SQLException e) {
             showError(LanguageLoader.getTranslation("messages.e"),
-                     LanguageLoader.getTranslation("messages.load_error").replace("{0}", e.getMessage()));
+                     LanguageLoader.getTranslation("messages.load_error").replace("{0}", errorMessageForDialog(e)));
             return;
         }
 
@@ -1687,7 +1691,7 @@ public class DisasterManagementGUI extends JFrame {
             }
         } catch (SQLException e) {
             showError(LanguageLoader.getTranslation("messages.e"),
-                     LanguageLoader.getTranslation("messages.load_error").replace("{0}", e.getMessage()));
+                     LanguageLoader.getTranslation("messages.load_error").replace("{0}", errorMessageForDialog(e)));
         }
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
@@ -1738,7 +1742,7 @@ public class DisasterManagementGUI extends JFrame {
             locations.forEach(locationCombo::addItem);
         } catch (SQLException e) {
             showError(LanguageLoader.getTranslation("messages.e"),
-                     LanguageLoader.getTranslation("messages.load_error").replace("{0}", e.getMessage()));
+                     LanguageLoader.getTranslation("messages.load_error").replace("{0}", errorMessageForDialog(e)));
         }
         dialog.add(locationCombo, gbc);
 
@@ -1770,7 +1774,7 @@ public class DisasterManagementGUI extends JFrame {
                 }
             } catch (SQLException ex) {
                 showError(LanguageLoader.getTranslation("messages.e"),
-                         LanguageLoader.getTranslation("messages.delete_error").replace("{0}", ex.getMessage()));
+                         LanguageLoader.getTranslation("messages.delete_error").replace("{0}", errorMessageForDialog(ex)));
             }
         });
 
@@ -1858,7 +1862,7 @@ public class DisasterManagementGUI extends JFrame {
                               LanguageLoader.getTranslation("messages.updated"));
                 } catch (SQLException ex) {
                     showError(LanguageLoader.getTranslation("messages.e"),
-                            LanguageLoader.getTranslation("messages.update_error").replace("{0}", ex.getMessage()));
+                            LanguageLoader.getTranslation("messages.update_error").replace("{0}", errorMessageForDialog(ex)));
                 }
             });
 
@@ -1870,7 +1874,7 @@ public class DisasterManagementGUI extends JFrame {
 
         } catch (SQLException e) {
             showError(LanguageLoader.getTranslation("messages.e"),
-                     LanguageLoader.getTranslation("messages.load_error").replace("{0}", e.getMessage()));
+                     LanguageLoader.getTranslation("messages.load_error").replace("{0}", errorMessageForDialog(e)));
         }
     }
 
@@ -1886,7 +1890,7 @@ public class DisasterManagementGUI extends JFrame {
                 });
             }
         } catch (SQLException e) {
-            showError("Erreur", "Échec du rafraîchissement des emplacements: " + e.getMessage());
+            showError("Erreur", "Échec du rafraîchissement des emplacements: " + errorMessageForDialog(e));
         }
     }
 
@@ -1973,7 +1977,7 @@ public class DisasterManagementGUI extends JFrame {
                               LanguageLoader.getTranslation("gui.success.supply_updated"));
                 } catch (SQLException ex) {
                     showError(LanguageLoader.getTranslation("gui.error.title"),
-                            LanguageLoader.getTranslation("gui.error.update_supply") + " " + ex.getMessage());
+                            LanguageLoader.getTranslation("gui.error.update_supply") + " " + errorMessageForDialog(ex));
                 }
             });
 
@@ -1985,7 +1989,7 @@ public class DisasterManagementGUI extends JFrame {
 
         } catch (SQLException e) {
             showError(LanguageLoader.getTranslation("gui.error.title"),
-                     LanguageLoader.getTranslation("gui.error.load_supply") + " " + e.getMessage());
+                     LanguageLoader.getTranslation("gui.error.load_supply") + " " + errorMessageForDialog(e));
         }
     }
 
@@ -2001,7 +2005,7 @@ public class DisasterManagementGUI extends JFrame {
                 });
             }
         } catch (SQLException e) {
-            showError("Erreur", "Échec du rafraîchissement des articles: " + e.getMessage());
+            showError("Erreur", "Échec du rafraîchissement des articles: " + errorMessageForDialog(e));
         }
     }
 
@@ -2163,7 +2167,7 @@ public class DisasterManagementGUI extends JFrame {
             }
         } catch (SQLException e) {
             showError(LanguageLoader.getTranslation("gui.error.title"),
-                     LanguageLoader.getTranslation("gui.error.load_medical_records") + " " + e.getMessage());
+                     LanguageLoader.getTranslation("gui.error.load_medical_records") + " " + errorMessageForDialog(e));
         }
 
         // Create buttons panel
@@ -2194,7 +2198,7 @@ public class DisasterManagementGUI extends JFrame {
                     }
                 } catch (SQLException ex) {
                     showError(LanguageLoader.getTranslation("gui.error.title"),
-                            LanguageLoader.getTranslation("gui.error.load_medical_record") + " " + ex.getMessage());
+                            LanguageLoader.getTranslation("gui.error.load_medical_record") + " " + errorMessageForDialog(ex));
                 }
             } else {
                 showError(LanguageLoader.getTranslation("gui.error.title"),
@@ -2221,7 +2225,7 @@ public class DisasterManagementGUI extends JFrame {
                         }
                     } catch (SQLException ex) {
                         showError(LanguageLoader.getTranslation("gui.error.title"),
-                                LanguageLoader.getTranslation("gui.error.delete_medical_record") + " " + ex.getMessage());
+                                LanguageLoader.getTranslation("gui.error.delete_medical_record") + " " + errorMessageForDialog(ex));
                     }
                 }
             } else {
@@ -2285,7 +2289,7 @@ public class DisasterManagementGUI extends JFrame {
             locations.forEach(locationCombo::addItem);
         } catch (SQLException e) {
             showError(LanguageLoader.getTranslation("gui.error.title"),
-                     LanguageLoader.getTranslation("gui.error.locations") + " " + e.getMessage());
+                     LanguageLoader.getTranslation("gui.error.locations") + " " + errorMessageForDialog(e));
         }
         dialog.add(locationCombo, gbc);
 
@@ -2326,7 +2330,7 @@ public class DisasterManagementGUI extends JFrame {
                 }
             } catch (SQLException ex) {
                 showError(LanguageLoader.getTranslation("gui.error.title"),
-                         LanguageLoader.getTranslation("gui.error.add_medical_record") + " " + ex.getMessage());
+                         LanguageLoader.getTranslation("gui.error.add_medical_record") + " " + errorMessageForDialog(ex));
             }
         });
 
@@ -2400,7 +2404,7 @@ public class DisasterManagementGUI extends JFrame {
             }
         } catch (SQLException e) {
             showError(LanguageLoader.getTranslation("messages.e"), 
-                     LanguageLoader.getTranslation("gui.e.locations") + " " + e.getMessage());
+                     LanguageLoader.getTranslation("gui.e.locations") + " " + errorMessageForDialog(e));
         }
         dialog.add(locationCombo, gbc);
 
@@ -2447,7 +2451,7 @@ public class DisasterManagementGUI extends JFrame {
                 }
             } catch (SQLException ex) {
                 showError(LanguageLoader.getTranslation("messages.e"), 
-                         LanguageLoader.getTranslation("gui.e.add_medical_record") + " " + ex.getMessage());
+                         LanguageLoader.getTranslation("gui.e.add_medical_record") + " " + errorMessageForDialog(ex));
             }
         });
 
