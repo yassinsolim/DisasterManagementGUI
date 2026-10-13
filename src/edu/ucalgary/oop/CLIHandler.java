@@ -1,13 +1,7 @@
 package edu.ucalgary.oop;
 
-import java.util.Scanner;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.sql.ResultSet;
 import java.util.List;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.regex.Pattern;
 
@@ -17,7 +11,6 @@ import java.util.regex.Pattern;
  * input processing, and command execution.
  */
 public class CLIHandler {
-    private final Scanner scanner;
     private final DatabaseAdapter dbAdapter;
     private boolean running;
     private InputHandler inputHandler;
@@ -28,7 +21,6 @@ public class CLIHandler {
      * @param dbAdapter The database adapter for data operations
      */
     public CLIHandler(DatabaseAdapter dbAdapter) {
-        this.scanner = new Scanner(System.in);
         this.dbAdapter = dbAdapter;
         this.running = true;
         this.inputHandler = new InputHandler();
@@ -56,15 +48,7 @@ public class CLIHandler {
         String inquiries = LanguageLoader.getTranslation("menu.inquiries");
         String locations = LanguageLoader.getTranslation("menu.locations");
         String exit = LanguageLoader.getTranslation("menu.exit");
-        
-        System.out.println("\nDEBUG - Menu items:");
-        System.out.println("Title: '" + title + "'");
-        System.out.println("Victims: '" + victims + "'");
-        System.out.println("Supplies: '" + supplies + "'");
-        System.out.println("Inquiries: '" + inquiries + "'");
-        System.out.println("Locations: '" + locations + "'");
-        System.out.println("Exit: '" + exit + "'");
-        
+
         System.out.println("\n" + title);
         System.out.println("1. " + victims);
         System.out.println("2. " + supplies);
@@ -297,7 +281,7 @@ public class CLIHandler {
                     LanguageLoader.getTranslation("messages.victim_add_failed"));
             }
         } catch (Exception e) {
-            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + e.getMessage());
+            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + UserFacingErrors.message(e));
         }
     }
 
@@ -315,7 +299,7 @@ public class CLIHandler {
                 System.out.println(victim.toString());
             }
         } catch (Exception e) {
-            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + e.getMessage());
+            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + UserFacingErrors.message(e));
         }
     }
 
@@ -351,7 +335,7 @@ public class CLIHandler {
                     LanguageLoader.getTranslation("messages.victim_update_failed"));
             }
         } catch (Exception e) {
-            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + e.getMessage());
+            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + UserFacingErrors.message(e));
         }
     }
 
@@ -367,7 +351,7 @@ public class CLIHandler {
                 System.out.println(LanguageLoader.getTranslation("messages.victim_not_found"));
             }
         } catch (Exception e) {
-            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + e.getMessage());
+            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + UserFacingErrors.message(e));
         }
     }
 
@@ -396,7 +380,7 @@ public class CLIHandler {
                     LanguageLoader.getTranslation("messages.supply_add_failed"));
             }
         } catch (Exception e) {
-            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + e.getMessage());
+            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + UserFacingErrors.message(e));
         }
     }
 
@@ -414,7 +398,7 @@ public class CLIHandler {
                 System.out.println(supply.toString());
             }
         } catch (Exception e) {
-            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + e.getMessage());
+            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + UserFacingErrors.message(e));
         }
     }
 
@@ -456,7 +440,7 @@ public class CLIHandler {
                     LanguageLoader.getTranslation("messages.supply_update_failed"));
             }
         } catch (Exception e) {
-            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + e.getMessage());
+            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + UserFacingErrors.message(e));
         }
     }
 
@@ -472,7 +456,7 @@ public class CLIHandler {
                 System.out.println(LanguageLoader.getTranslation("messages.supply_not_found"));
             }
         } catch (Exception e) {
-            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + e.getMessage());
+            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + UserFacingErrors.message(e));
         }
     }
 
@@ -506,7 +490,7 @@ public class CLIHandler {
                     LanguageLoader.getTranslation("messages.inquiry_add_failed"));
             }
         } catch (Exception e) {
-            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + e.getMessage());
+            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + UserFacingErrors.message(e));
         }
     }
 
@@ -524,7 +508,7 @@ public class CLIHandler {
                 System.out.println(inquiry.toString());
             }
         } catch (Exception e) {
-            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + e.getMessage());
+            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + UserFacingErrors.message(e));
         }
     }
 
@@ -568,7 +552,7 @@ public class CLIHandler {
                     LanguageLoader.getTranslation("messages.inquiry_update_failed"));
             }
         } catch (Exception e) {
-            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + e.getMessage());
+            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + UserFacingErrors.message(e));
         }
     }
 
@@ -584,7 +568,7 @@ public class CLIHandler {
                 System.out.println(LanguageLoader.getTranslation("messages.inquiry_not_found"));
             }
         } catch (Exception e) {
-            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + e.getMessage());
+            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + UserFacingErrors.message(e));
         }
     }
 
@@ -612,7 +596,7 @@ public class CLIHandler {
                     LanguageLoader.getTranslation("messages.location_add_failed"));
             }
         } catch (Exception e) {
-            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + e.getMessage());
+            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + UserFacingErrors.message(e));
         }
     }
 
@@ -630,7 +614,7 @@ public class CLIHandler {
                 System.out.println(location.toString());
             }
         } catch (Exception e) {
-            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + e.getMessage());
+            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + UserFacingErrors.message(e));
         }
     }
 
@@ -680,7 +664,7 @@ public class CLIHandler {
                     LanguageLoader.getTranslation("messages.location_update_failed"));
             }
         } catch (Exception e) {
-            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + e.getMessage());
+            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + UserFacingErrors.message(e));
         }
     }
 
@@ -696,7 +680,7 @@ public class CLIHandler {
                 System.out.println(LanguageLoader.getTranslation("messages.location_not_found"));
             }
         } catch (Exception e) {
-            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + e.getMessage());
+            System.out.println(LanguageLoader.getTranslation("messages.error") + ": " + UserFacingErrors.message(e));
         }
     }
 
@@ -888,11 +872,4 @@ public class CLIHandler {
         System.out.println("Address: " + location.getAddress());
     }
 
-    private void logError(String message) {
-        try (FileWriter writer = new FileWriter("data/errorlog.txt", true)) {
-            writer.write(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + " - " + message + "\n");
-        } catch (IOException e) {
-            System.err.println("Failed to write to error log: " + e.getMessage());
-        }
-    }
 } 

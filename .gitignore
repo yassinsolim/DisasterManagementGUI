@@ -9,6 +9,11 @@
 *.log
 hs_err_pid*
 replay_pid*
+/data/errorlog.txt
+
+# === Local credentials ===
+.env
+.env.*
 
 # === BlueJ ===
 *.ctxt
@@ -40,3 +45,6 @@ bin/
 out/
 target/
 build/
+
+# === macOS ===
+.DS_Store

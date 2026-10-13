@@ -85,37 +85,12 @@ public class CLIHandlerTest {
         
         // Assert
         String output = outputStream.toString();
-        System.out.println("\nDEBUG - Actual output:");
-        System.out.println("----------------------------------------");
-        System.out.println(output);
-        System.out.println("----------------------------------------");
-        System.out.println("Output length: " + output.length());
-        System.out.println("Contains 'Disaster': " + output.contains("Disaster"));
-        System.out.println("Contains 'Victim': " + output.contains("Victim"));
-        System.out.println("Contains 'Management': " + output.contains("Management"));
-        System.out.println("Contains 'System': " + output.contains("System"));
-        
-        // Check for menu items in a more flexible way
-        assertTrue("Output should contain menu title", 
-            output.contains("Disaster") || 
-            output.contains("Victim") || 
-            output.contains("Management") || 
-            output.contains("System"));
-            
-        assertTrue("Output should contain victim management option", 
-            output.contains("Victim") || output.contains("victim"));
-            
-        assertTrue("Output should contain item management option", 
-            output.contains("Item") || output.contains("item"));
-            
-        assertTrue("Output should contain inquiry management option", 
-            output.contains("Inquiry") || output.contains("inquiry"));
-            
-        assertTrue("Output should contain location management option", 
-            output.contains("Location") || output.contains("location"));
-            
-        assertTrue("Output should contain exit option", 
-            output.contains("Exit") || output.contains("exit"));
+        assertTrue(output.contains(LanguageLoader.getTranslation("menu.title")));
+        assertTrue(output.contains("1. " + LanguageLoader.getTranslation("menu.victims")));
+        assertTrue(output.contains("2. " + LanguageLoader.getTranslation("menu.supplies")));
+        assertTrue(output.contains("3. " + LanguageLoader.getTranslation("menu.inquiries")));
+        assertTrue(output.contains("4. " + LanguageLoader.getTranslation("menu.locations")));
+        assertTrue(output.contains("5. " + LanguageLoader.getTranslation("menu.exit")));
     }
     
     @Test
@@ -128,7 +103,7 @@ public class CLIHandlerTest {
         
         // Assert
         String output = outputStream.toString();
-        assertTrue(output.contains("Victim Management"));
+        assertTrue(output.contains("1. " + LanguageLoader.getTranslation("menu.add_victim")));
     }
     
     @Test
@@ -141,7 +116,7 @@ public class CLIHandlerTest {
         
         // Assert
         String output = outputStream.toString();
-        assertTrue(output.contains("Invalid choice"));
+        assertTrue(output.contains("Please enter a number between 1 and 5."));
     }
     
     @Test

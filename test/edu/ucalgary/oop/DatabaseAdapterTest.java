@@ -7,7 +7,10 @@ import org.junit.After;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.io.ByteArrayOutputStream;
@@ -218,5 +221,82 @@ public class DatabaseAdapterTest {
         assertNotNull("Victims list should not be null", victims);
         assertTrue("Should have at least two victims", victims.size() > 1);
         assertEquals("Second victim should be Jane", "Jane", victims.get(1).getFirstName());
+    }
+
+    @Test
+    public void testConnectionUrlRejectsCredentialsWithoutEchoingThem() {
+        String marker = "synthetic-url-secret-4711";
+        String[] urls = {
+            "jdbc:postgresql://localhost:5432/test?sslmode=require&user=wrong&password=" + marker,
+            "jdbc:postgresql://localhost:5432/test?%75ser=wrong",
+            "jdbc:postgresql://localhost:5432/test?PASSWORD=" + marker,
+            "jdbc:postgresql://wrong:" + marker + "@localhost:5432/test"
+        };
+
+        for (String url : urls) {
+            try {
+                DatabaseAdapter.validateCredentialFreeUrl(url);
+                fail("Credentials in DB_URL must be rejected");
+            } catch (SQLException e) {
+                assertTrue(e.getMessage().contains("DB_URL"));
+                assertFalse(e.getMessage().contains(marker));
+                assertNull(e.getCause());
+            }
+        }
+    }
+
+    @Test
+    public void testConnectionUrlAllowsNonCredentialOptions() throws SQLException {
+        DatabaseAdapter.validateCredentialFreeUrl(
+            "jdbc:postgresql://localhost:5432/test?sslmode=verify-full&connectTimeout=5");
+        DatabaseAdapter.validateCredentialFreeUrl(
+            "jdbc:postgresql:test?applicationName=https://example.net/contact@operator");
+    }
+
+    @Test
+    public void testMalformedConnectionUrlOptionDoesNotEchoValue() {
+        String marker = "synthetic-url-secret-4711";
+        try {
+            DatabaseAdapter.validateCredentialFreeUrl("jdbc:postgresql://localhost/test?%ZZ=" + marker);
+            fail("Malformed URL options must be rejected");
+        } catch (SQLException e) {
+            assertFalse(e.getMessage().contains(marker));
+            assertNull(e.getCause());
+        }
+    }
+
+    @Test
+    public void testMissingPasswordStopsTheConnectionAttempt() {
+        Map<String, String> env = new HashMap<>();
+        env.put("DB_USER", "oop");
+        try {
+            DatabaseAdapter.connectionProperties(env);
+            fail("A missing DB_PASSWORD must fail before connecting");
+        } catch (SQLException e) {
+            assertTrue(e.getMessage().contains("DB_PASSWORD is not set"));
+        }
+    }
+
+    @Test
+    public void testEmptyPasswordIsKeptForTrustAuthentication() throws SQLException {
+        Map<String, String> env = new HashMap<>();
+        env.put("DB_PASSWORD", "");
+        Properties props = DatabaseAdapter.connectionProperties(env);
+        assertEquals("", props.getProperty("password"));
+    }
+
+    @Test
+    public void testCredentialsInEnvironmentUrlAreRejected() {
+        String marker = "synthetic-url-secret-4711";
+        Map<String, String> env = new HashMap<>();
+        env.put("DB_PASSWORD", "unused");
+        env.put("DB_URL", "jdbc:postgresql://wrong:" + marker + "@localhost:5432/test");
+        try {
+            DatabaseAdapter.connectionUrl(env);
+            fail("Credentials in DB_URL must be rejected");
+        } catch (SQLException e) {
+            assertTrue(e.getMessage().contains("DB_URL"));
+            assertFalse(e.getMessage().contains(marker));
+        }
     }
 }

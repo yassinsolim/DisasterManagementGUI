@@ -8,6 +8,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
     CLIHandlerTest.class,
     DatabaseAdapterTest.class,
+    UserFacingErrorsTest.class,
     DisasterVictimTest.class,
     ErrorLoggerTest.class,
     ExternalInquiryTest.class,

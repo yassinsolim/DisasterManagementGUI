@@ -35,7 +35,7 @@ public class ErrorLogger {
             writer.println(logMessage);
             log.add(logMessage);
         } catch (IOException e) {
-            System.err.println("Failed to write to error log: " + e.getMessage());
+            System.err.println("Failed to write error log.");
         }
     }
 

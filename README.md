@@ -28,10 +28,17 @@ Easily add new victims with detailed information:
 
 ### Prerequisites
 - Java 8 or newer
-- (Optional) PostgreSQL database for full functionality
+- PostgreSQL database (required when starting the GUI)
 
 ### 1. Download Dependencies
-All required JARs (PostgreSQL JDBC, JUnit, Hamcrest) are included in the `lib/` folder.
+JARs are ignored by Git, so a fresh clone has no `lib/`. Create that folder
+and download these three files into it:
+
+- [PostgreSQL JDBC 42.7.3](https://repo.maven.apache.org/maven2/org/postgresql/postgresql/42.7.3/postgresql-42.7.3.jar)
+- [JUnit 4.13.2](https://repo.maven.apache.org/maven2/junit/junit/4.13.2/junit-4.13.2.jar)
+- [Hamcrest Core 1.3](https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar)
+
+The classpath separator below is `;` on Windows. Use `:` on Linux or macOS.
 
 ### 2. Compile the Project
 ```sh
@@ -49,12 +56,54 @@ javac -cp "lib/*;out" -d out test/edu/ucalgary/oop/*.java
 java -cp "out;lib/*" org.junit.runner.JUnitCore edu.ucalgary.oop.AllTests
 ```
 
-## 🗄️ Database Connectivity
-The application can connect to a PostgreSQL database for persistent data storage. By default, it attempts to connect to:
-- `jdbc:postgresql://localhost:5432/ensf380project`
-- User: `oop`
+`AllTests` uses test-mode adapters and does not connect to PostgreSQL. To test connection reuse, first set `DB_URL`, `DB_USER`, and `DB_PASSWORD` to a disposable local PostgreSQL database with scratch credentials. Then run this separate integration suite (replace `;` with `:` on Linux or macOS):
 
-You can modify these settings in the source code to match your environment. If the database is unavailable, the app may still run in a limited mode.
+```sh
+java -cp "out;lib/*" org.junit.runner.JUnitCore edu.ucalgary.oop.DatabaseAdapterLifecycleIntegrationTest
+```
+
+Run `DatabaseAdapterLoggingIntegrationTest` separately against the same disposable database, from an empty scratch directory with no `error.log`. Use absolute paths to the compiled `out` and `lib` directories, since this test creates and removes its own log file:
+
+```sh
+java -cp "<repo>/out;<repo>/lib/*" org.junit.runner.JUnitCore edu.ucalgary.oop.DatabaseAdapterLoggingIntegrationTest
+```
+
+## 🗄️ Database Connectivity
+The application uses PostgreSQL. Runtime credentials come from environment variables; they must not be committed to this repository.
+
+| Variable | Required | Default |
+| --- | --- | --- |
+| `DB_URL` | no | `jdbc:postgresql://localhost:5432/ensf380project` |
+| `DB_USER` | no | `oop` |
+| `DB_PASSWORD` | yes | none |
+
+`DB_USER` and `DB_PASSWORD` supply the connection credentials. Do not put credentials in `DB_URL`: URL userinfo and `user`/`password` query options are rejected because PostgreSQL JDBC would give URL options precedence. Other URL options remain available. For a remote server, configure certificate-validated TLS (for example, `?sslmode=verify-full` with a trusted CA); the defaults do not guarantee it.
+
+`DB_PASSWORD` has no default. When it is unset, `DatabaseAdapter` raises an explicit, credential-free error; the GUI shows a generic database dialog. Set the variable to an empty value only if your server intentionally uses trust authentication:
+
+Windows PowerShell:
+
+```powershell
+$env:DB_URL = "jdbc:postgresql://localhost:5432/ensf380project"
+$env:DB_USER = "oop"
+$env:DB_PASSWORD = "your-password"
+java -cp "out;lib/*" edu.ucalgary.oop.Main
+```
+
+Linux or macOS shell:
+
+```sh
+export DB_URL="jdbc:postgresql://localhost:5432/ensf380project"
+export DB_USER="oop"
+export DB_PASSWORD="your-password"
+java -cp "out:lib/*" edu.ucalgary.oop.Main
+```
+
+If the database is unavailable, the GUI shows a generic connection error and exits. Raw JDBC errors can contain the connection URL, so they are not displayed or logged during connection setup. A `.env` file is ignored by Git but is not loaded automatically; set the variables in the process environment.
+
+New `DatabaseAdapter` SQL-error entries in `error.log` contain a fixed operation label and, when available, a validated SQLSTATE or numeric vendor code. They omit raw JDBC exception text. CLI and GUI error paths show a generic message when the exception or its cause is a `SQLException`; non-SQL validation messages remain unchanged. Logs created by older versions, including `data/errorlog.txt`, may still contain application data; restrict access to them and do not publish them.
+
+Database credentials previously committed to this repository remain in public history. The database owner must revoke or rotate them and audit any exposure before using this application. Removing credentials from current source or adding ignore rules does not revoke or erase them.
 
 ## 💡 Try It Yourself!
 1. Clone this repository.

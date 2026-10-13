@@ -30,10 +30,8 @@ public class Main {
         // Process language argument if provided
         if (args.length > 0) {
             String providedLang = args[0];
-            System.out.println("Provided language code: " + providedLang);
             if (LANG_CODE_PATTERN.matcher(providedLang).matches()) {
                 langCode = providedLang;
-                System.out.println("Using language code: " + langCode);
             } else {
                 System.err.println("Error: Invalid language code format. Expected format: aa-BB (e.g., en-CA)");
                 System.err.println("Defaulting to " + DEFAULT_LANG);
@@ -41,7 +39,6 @@ public class Main {
         }
 
         // Initialize language loader
-        System.out.println("Initializing language loader with code: " + langCode);
         if (!LanguageLoader.initialize(langCode)) {
             System.err.println("Error: Could not load language file for " + langCode);
             System.err.println("Defaulting to " + DEFAULT_LANG);
@@ -50,7 +47,6 @@ public class Main {
                 System.exit(1);
             }
         }
-        System.out.println("Successfully loaded language: " + LanguageLoader.getCurrentLanguage());
 
         // Start GUI
         SwingUtilities.invokeLater(() -> {
