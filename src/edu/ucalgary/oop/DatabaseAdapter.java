@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Pattern;
 import java.net.URLDecoder;
@@ -50,20 +51,12 @@ public class DatabaseAdapter implements AutoCloseable {
     }
 
     private void initializeConnection() throws SQLException {
-        String password = System.getenv("DB_PASSWORD");
-        if (password == null) {
-            throw new SQLException("DB_PASSWORD is not set. Set DB_PASSWORD before connecting; "
-                + "use an empty value if the server uses trust authentication.");
-        }
-
-        String url = System.getenv().getOrDefault("DB_URL", DEFAULT_DB_URL);
-        validateCredentialFreeUrl(url);
+        Map<String, String> env = System.getenv();
+        Properties props = connectionProperties(env);
+        String url = connectionUrl(env);
 
         try {
             Class.forName("org.postgresql.Driver");
-            Properties props = new Properties();
-            props.setProperty("user", System.getenv().getOrDefault("DB_USER", DEFAULT_DB_USER));
-            props.setProperty("password", password);
             connection = DriverManager.getConnection(url, props);
             if (connection == null) {
                 throw new SQLException("No database connection available");
@@ -75,6 +68,29 @@ public class DatabaseAdapter implements AutoCloseable {
             ErrorLogger.logError(CONNECTION_FAILURE);
             throw new SQLException(CONNECTION_FAILURE);
         }
+    }
+
+    /**
+     * Builds the connection properties from the environment. A missing DB_PASSWORD fails
+     * before any connection attempt; an empty one is kept for trust authentication.
+     */
+    static Properties connectionProperties(Map<String, String> env) throws SQLException {
+        String password = env.get("DB_PASSWORD");
+        if (password == null) {
+            throw new SQLException("DB_PASSWORD is not set. Set DB_PASSWORD before connecting; "
+                + "use an empty value if the server uses trust authentication.");
+        }
+        Properties props = new Properties();
+        props.setProperty("user", env.getOrDefault("DB_USER", DEFAULT_DB_USER));
+        props.setProperty("password", password);
+        return props;
+    }
+
+    /** Returns DB_URL from the environment, rejecting URLs that carry credentials. */
+    static String connectionUrl(Map<String, String> env) throws SQLException {
+        String url = env.getOrDefault("DB_URL", DEFAULT_DB_URL);
+        validateCredentialFreeUrl(url);
+        return url;
     }
 
     static void validateCredentialFreeUrl(String url) throws SQLException {
